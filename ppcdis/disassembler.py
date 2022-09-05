@@ -546,8 +546,8 @@ class Disassembler:
         )
     
     def function_to_text_with_referenced(
-        self, addr: int, inline=False, extra=False, hashable=False, declare_mangled=True
-    ) -> Tuple[str, Set[Tuple[int, str]]]:
+        self, addr: int, inline=False, extra=False, hashable=False, declare_mangled=True,
+        end_addr=None) -> Tuple[str, Set[Tuple[int, str]]]:
         """Outputs the disassembly of a single function to text, and all addresses it referenced
         
         Inline changes the output to CW inline asm syntax
@@ -561,8 +561,11 @@ class Disassembler:
             self._sym.reset_hash_naming()
 
         # Get function bounds
-        start, end = self._sym.get_containing_function(addr)
-        assert addr == start, f"Expected function at {addr:x}" 
+        if end_addr is None:
+            start, end = self._sym.get_containing_function(addr)
+            assert addr == start, f"Expected function at {addr:x}" 
+        else:
+            start, end = addr, end_addr
 
         # Get section
         sec = self._bin.find_section_containing(addr, True)

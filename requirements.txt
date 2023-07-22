@@ -3,3 +3,4 @@ capstone==5.0.1
 pyelftools
 pylibyaml
 PyYAML
+protobuf==4.21.0
